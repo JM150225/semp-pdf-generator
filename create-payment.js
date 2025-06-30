@@ -22,9 +22,9 @@ exports.handler = async (event, context) => {
             description: 'PDF sin marca de agua para solicitud de empleo'
         }],
         back_urls: {
-            success: `${process.env.URL || 'https://tu-sitio.netlify.app'}/success`,
-            failure: `${process.env.URL || 'https://tu-sitio.netlify.app'}/failure`,
-            pending: `${process.env.URL || 'https://tu-sitio.netlify.app'}/pending`
+            success: `${process.env.URL || 'https://jm150225.github.io/semp-pdf-generator/'}/success`,
+            failure: `${process.env.URL || 'https://jm150225.github.io/semp-pdf-generator/'}/failure`,
+            pending: `${process.env.URL || 'https://jm150225.github.io/semp-pdf-generator/'}/pending`
         },
         auto_return: 'approved',
         external_reference: `SEMP_${Date.now()}`
