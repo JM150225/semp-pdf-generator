@@ -7,7 +7,7 @@ const PORT = 3000;
 
 // Configurar MercadoPago
 mercadopago.configure({
-    access_token: 'TEST-2073581272057472-061501-7e2c20363835c01a569f6b869e10e142-816159964'
+    access_token: 'APP_USR-4519065747758458-062214-cfe5ab4826ff7396ffcb8a283799dcca-816159964'
 });
 
 // Middleware
