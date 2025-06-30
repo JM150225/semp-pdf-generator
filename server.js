@@ -24,9 +24,9 @@ app.post('/create_preference', async (req, res) => {
                 quantity: 1,
             }],
             back_urls: {
-                success: 'http://localhost:3000/success',
-                failure: 'http://localhost:3000/failure',
-                pending: 'http://localhost:3000/pending'
+                success: 'https://jm150225.github.io/semp-pdf-generator//success',
+                failure: 'https://jm150225.github.io/semp-pdf-generator//failure',
+                pending: 'https://jm150225.github.io/semp-pdf-generator//pending'
             },
             auto_return: 'approved'
         };
