@@ -1567,7 +1567,30 @@ function borrarCampo(id) {
     <br>
     
     <!-- 💳 Botón de Pago -->
-    
+    <section id="seccion-pago-premium" style="text-align: center; margin-top: 40px; padding: 20px; background-color: #f9f9f9; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+    <h2>Adquiere tu PDF Profesional</h2>
+    <p style="font-size: 1.1em; color: #555;">Desbloquea la versión premium de tu Solicitud de Empleo Portable sin marcas de agua.</p>
+    <p style="font-weight: bold; font-size: 1.3em; color: #333;">Precio: $5.00 MXN</p>
+    <button id="btnPagarPremium" onclick="iniciarPago()" style="
+        background-color: #663399; /* Morado distintivo de Mercado Pago */
+        color: white;
+        padding: 15px 30px;
+        border: none;
+        border-radius: 5px;
+        font-size: 1.2em;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        margin-top: 20px;
+    ">
+        Comprar PDF Premium
+    </button>
+    <div id="notificacionExito" style="display: none; color: green; margin-top: 20px; font-weight: bold;">
+        ¡Gracias por tu compra! Tu versión premium está lista.
+    </div>
+    <div id="notificacionError" style="display: none; color: red; margin-top: 20px; font-weight: bold;">
+        Hubo un error al procesar tu pago. Por favor, inténtalo de nuevo más tarde.
+    </div>
+</section>
     <br>
     
     <!-- 👻 BOTÓN #3: Premium invisible -->
