@@ -4721,73 +4721,56 @@ function generarPDFPremium() {
     generarPDF();
 }
 
+// 🎉 FUNCIÓN #3: Iniciar Proceso de Pago
+async function iniciarPago() {
+    console.log("Iniciando proceso de pago...");
 
+    try {
+        const response = await fetch('/create_preference', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({}) // Si necesitas enviar datos del producto desde el frontend, agrégalos aquí
+        });
 
+        const data = await response.json();
 
+        if (response.ok) {
+            const mp = new MercadoPago('APP_USR-73017095-6b5f-4d49-b187-57bdc0dd25e4', { // Tu Public Key
+                locale: 'es-MX'
+            });
 
+            // Redirige al usuario a la URL de Mercado Pago
+            mp.checkout({
+                preference: {
+                    id: data.init_point.split('id=')[1] // Extrae solo el ID de la preferencia
+                }
+            }).open();
 
+            // Ocultar botón de pago si existe (puedes ajustar esta lógica según necesites)
+            const btnPagarPremium = document.getElementById('btnPagarPremium');
+            if (btnPagarPremium) {
+                btnPagarPremium.style.display = 'none';
+            }
 
-
-
-
-
-// 💳 PAGO REAL SIN VULNERABILIDAD
-function iniciarPago() {
-    // Redirigir directamente a MercadoPago (sin JavaScript vulnerable)
-    const paymentUrl = 'https://www.mercadopago.com.mx/checkout/v1/redirect?pref_id=816159964-74e935a9-d4b7-4b93-a8d3-ae11b27ff9b8';
-    
-    // Abrir en nueva ventana
-    window.open(paymentUrl, '_blank');
-    
-    // MENSAJE CLARO AL USUARIO
-    alert(`💳 REDIRIGIDO A MERCADOPAGO
-
-⚠️ IMPORTANTE:
-• Solo se activará Premium con PAGO REAL
-• No hay trucos ni vulnerabilidades
-• El sistema verificará tu pago
-
-ID: SEMP_${Date.now()}`);
-}
-
-// 🎉 ESTA FUNCIÓN SOLO SE ACTIVA CON PAGO REAL
-function pagoExitoso() {
-    // Verificar si realmente viene de MercadoPago
-    const urlParams = new URLSearchParams(window.location.search);
-    const status = urlParams.get('collection_status');
-    
-    // SOLO activar si hay confirmación real
-    if (status === 'approved') {
-        const btnPremium = document.getElementById('btnPremium');
-        if (btnPremium) {
-            btnPremium.style.display = 'inline-block';
+        } else {
+            console.error('Error al crear la preferencia de pago:', data.error);
+            const errorNotif = document.getElementById('notificacionError');
+            if (errorNotif) {
+                errorNotif.textContent = 'Error al iniciar el pago. Intenta de nuevo.';
+                errorNotif.style.display = 'block';
+            }
         }
-        
-        const botonesPago = document.querySelectorAll('button[onclick="iniciarPago()"]');
-        botonesPago.forEach(btn => btn.style.display = 'none');
-        
-        alert('🎊 ¡PAGO CONFIRMADO POR MERCADOPAGO! Premium activado.');
+    } catch (error) {
+        console.error('Error de red o servidor:', error);
+        const errorNotif = document.getElementById('notificacionError');
+        if (errorNotif) {
+            errorNotif.textContent = 'Problemas de conexión. Intenta de nuevo.';
+            errorNotif.style.display = 'block';
+        }
     }
 }
-
-// Verificar al cargar página
-window.addEventListener('load', function() {
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('collection_status') === 'approved') {
-        pagoExitoso();
-    }
-});
-
-
-
-
-
-
-
-
-
-
-
 
 // 🎉 FUNCIÓN #4: Manejar pago exitoso
 function pagoExitoso() {
