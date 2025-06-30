@@ -4726,7 +4726,7 @@ async function iniciarPago() {
     console.log("Iniciando proceso de pago...");
 
     try {
-        const response = await fetch('/create_preference', {
+        const response = await fetch('https://semp-backend-mercadopago.onrender.com', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
