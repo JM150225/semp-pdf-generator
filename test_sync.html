@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEMP - Test de Sincronización</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="min-vh-100 d-flex align-items-center py-4">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-12 col-md-8 col-lg-6">
+                    <div class="card glassmorphism border-0 shadow-lg">
+                        <div class="card-body p-5 text-center">
+                            <div class="mb-4">
+                                <i class="fas fa-sync-alt text-primary display-1"></i>
+                            </div>
+                            <h2 class="fw-bold text-primary mb-3">Test de Sincronización</h2>
+                            <p class="lead mb-4">Verificación de códigos dinámicos</p>
+                            
+                            <div class="mb-4">
+                                <button id="testSyncBtn" class="btn btn-primary btn-lg">
+                                    <i class="fas fa-play me-2"></i>
+                                    Ejecutar Test
+                                </button>
+                            </div>
+
+                            <div id="resultContainer" class="d-none">
+                                <div class="code-display-container mb-4">
+                                    <div class="row text-center">
+                                        <div class="col-md-6">
+                                            <h5>Código Actual</h5>
+                                            <div class="code-display p-3 rounded-3 bg-primary text-white">
+                                                <span id="currentCode" class="fs-3 fw-bold"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h5>Estado</h5>
+                                            <div id="syncStatus" class="p-3 rounded-3">
+                                                <span id="statusText" class="fs-5"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="alert alert-info">
+                                    <h6>Detalles del Test:</h6>
+                                    <ul class="mb-0 text-start">
+                                        <li>Fecha UTC: <span id="testDate"></span></li>
+                                        <li>Hora: <span id="testTime"></span></li>
+                                        <li>Tests ejecutados: <span id="testCount"></span></li>
+                                        <li>Consistencia: <span id="consistency"></span></li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="mt-4">
+                                <a href="{{ url_for('home') }}" class="btn btn-outline-primary">
+                                    <i class="fas fa-arrow-left me-2"></i>
+                                    Volver al Inicio
+                                </a>
+                                <a href="{{ url_for('enigma') }}" class="btn btn-outline-secondary ms-2">
+                                    <i class="fas fa-lock me-2"></i>
+                                    Ir a Enigma
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom Scripts -->
+    <script src="{{ url_for('static', filename='js/enigmaUtils.js') }}"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const testSyncBtn = document.getElementById('testSyncBtn');
+            const resultContainer = document.getElementById('resultContainer');
+            const currentCode = document.getElementById('currentCode');
+            const syncStatus = document.getElementById('syncStatus');
+            const statusText = document.getElementById('statusText');
+            const testDate = document.getElementById('testDate');
+            const testTime = document.getElementById('testTime');
+            const testCount = document.getElementById('testCount');
+            const consistency = document.getElementById('consistency');
+
+            testSyncBtn.addEventListener('click', () => {
+                // Ejecutar test de sincronización
+                const syncResult = verifyCodeSynchronization();
+                const now = new Date();
+                
+                // Mostrar resultados
+                currentCode.textContent = syncResult.code;
+                
+                if (syncResult.synchronized) {
+                    syncStatus.className = 'p-3 rounded-3 bg-success text-white';
+                    statusText.innerHTML = '<i class="fas fa-check-circle me-2"></i>SINCRONIZADO';
+                } else {
+                    syncStatus.className = 'p-3 rounded-3 bg-danger text-white';
+                    statusText.innerHTML = '<i class="fas fa-times-circle me-2"></i>ERROR';
+                }
+                
+                testDate.textContent = now.toISOString().split('T')[0];
+                testTime.textContent = now.toTimeString().split(' ')[0];
+                testCount.textContent = syncResult.tests.length;
+                consistency.textContent = syncResult.synchronized ? '100%' : '0%';
+                
+                // Mostrar debug en consola
+                console.log('=== Test de Sincronización ===');
+                console.log('Resultado:', syncResult);
+                console.log('Códigos generados:', syncResult.tests);
+                console.log('Fecha UTC actual:', getCurrentDateFormatted());
+                
+                // Mostrar resultados
+                resultContainer.classList.remove('d-none');
+                
+                // Scroll hacia resultados
+                resultContainer.scrollIntoView({ behavior: 'smooth' });
+            });
+
+            // Ejecutar test automático al cargar
+            setTimeout(() => {
+                testSyncBtn.click();
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
